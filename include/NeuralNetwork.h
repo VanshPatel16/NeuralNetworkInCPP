@@ -57,25 +57,25 @@ class NeuralNetwork{
         void train(const std::vector<VectorXd>& inputs, 
             const std::vector<VectorXd>& target_outputs, 
             double learning_rate, int epochs) {
-
-            for (int epoch = 0; epoch < epochs; ++epoch) {
-                double epoch_loss = 0.0;
-                
-                for (size_t i = 0; i < inputs.size(); ++i) {
-                    VectorXd input = inputs[i];
-                    VectorXd target_output = target_outputs[i];
-
-                    forward(input);
-
-                    VectorXd output = get_output();
-                    double loss = functions::error_function(output, target_output);
-                    epoch_loss += loss;
-
-                    backward(input, target_output, learning_rate);
+                for (int epoch = 0; epoch < epochs; ++epoch) {
+                    double epoch_loss = 0.0;
+                    
+                    for (size_t i = 0; i < inputs.size(); ++i) {
+                        VectorXd input = inputs[i];
+                        VectorXd target_output = target_outputs[i];
+                        
+                        forward(input);
+                        
+                        VectorXd output = get_output();
+                        double loss = functions::error_function(output, target_output);
+                        epoch_loss += loss;
+                        
+                        backward(input, target_output, learning_rate);
                 }
                 epoch_loss /= inputs.size();
-                
-                std::cout << "Epoch " << epoch + 1 << "/" << epochs << " - Loss: " << epoch_loss << std::endl;
+                if(epoch%10 == 0){
+                    std::cout << "Epoch " << epoch + 1 << "/" << epochs << " - Loss: " << epoch_loss << std::endl;
+                }
         }
     }
 

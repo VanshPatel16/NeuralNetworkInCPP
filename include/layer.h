@@ -21,10 +21,11 @@ class Layer{
 
     public:
 
-        Layer(int input_size_neurons,int neurons,std::function<VectorXd(const VectorXd&)>activationFunction) : activation_function(activation_function),
+        Layer(int input_size_neurons,int neurons,std::function<VectorXd(const VectorXd&)>activation_function,std::function<VectorXd(const VectorXd&)>activation_function_derivative) : activation_function(activation_function),
             activation_function_derivative(activation_function_derivative){
+                assert(input_size_neurons > 0 && neurons > 0);
                 weights = MatrixXd :: Random(input_size_neurons,neurons);
-                biases = MatrixXd :: Random(neurons);
+                biases = VectorXd :: Random(neurons);
         }
 
         void forward(const VectorXd&input){
@@ -55,7 +56,7 @@ class Layer{
 
         void update_weights(const VectorXd &inputs,double learning_rate){
             weights -= learning_rate * (inputs) * delta.transpose();
-            biases -= learning_rate * inputs;
+            biases -= learning_rate * delta;
         }
 
         VectorXd derivative_of_activation_function(){
